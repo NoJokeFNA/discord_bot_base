@@ -17,65 +17,66 @@ import java.util.ArrayList;
 @Setter
 public class EasyEmbed {
 
-    private final String title;
-    private final String description;
+    private final String title, description;
     private Author author;
     private final Color color;
     private Footer footer;
-    private String imageUrl;
-    private String thumbnailUrl;
+    private String imageUrl, thumbnailUrl;
     private TemporalAccessor timestamp;
     private ArrayList<MessageEmbed.Field> fields;
+    
     @Getter
     private final int autoDelete;
 
     public MessageEmbed buildMessage() {
         EmbedBuilder embedBuilder = new EmbedBuilder();
+        
         if (author != null) {
             if (author.getName() != null) {
                 if (author.getUrl() != null) {
-                    if (author.getIconUrl() != null) {
+                    if (author.getIconUrl() != null)
                         embedBuilder.setAuthor(author.getName(), author.getUrl(), author.getIconUrl());
-                    } else {
+                    else
                         embedBuilder.setAuthor(author.getName(), author.getUrl());
-                    }
                 } else {
                     embedBuilder.setAuthor(author.getName());
                 }
             }
         }
+        
         embedBuilder.setColor(color);
         embedBuilder.setDescription(description);
+        
         if (footer != null) {
             if (footer.getText() != null) {
-                if (footer.getIconUrl() != null) {
+                if (footer.getIconUrl() != null)
                     embedBuilder.setFooter(footer.getText(), footer.getIconUrl());
-                } else {
+                else
                     embedBuilder.setFooter(footer.getText());
-                }
             }
         }
-        if (imageUrl != null) {
+        
+        if (imageUrl != null) 
             embedBuilder.setImage(imageUrl);
-        }
-        if (thumbnailUrl != null) {
+        
+        if (thumbnailUrl != null) 
             embedBuilder.setThumbnail(thumbnailUrl);
-        }
-        if (timestamp != null) {
+        
+        if (timestamp != null)
             embedBuilder.setTimestamp(timestamp);
-        }
+            
         embedBuilder.setTitle(title);
-        if (fields != null) {
+        
+        if (fields != null) 
             fields.forEach(embedBuilder::addField);
-        }
+        
         return embedBuilder.build();
     }
 
     public Message buildMessageAndSend(TextChannel textChannel) {
         Message message = textChannel.sendMessage(buildMessage()).complete();
-        if (autoDelete != 0) {
+        if (autoDelete != 0)
             new DelayDelete(message, autoDelete);
-        }
         return message;
     }
 
@@ -93,7 +94,7 @@ public class EasyEmbed {
     @Getter
     @AllArgsConstructor
     public static class Author {
-        private String name;
+        private String authorName;
         private String url;
         private String iconUrl;
     }
